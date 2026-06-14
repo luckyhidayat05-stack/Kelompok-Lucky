@@ -98,13 +98,16 @@ class MahasiswaController extends Controller
             ->with('success', 'Data mahasiswa berhasil diperbarui.');
     }
 
-    /**
-     * Hapus data mahasiswa dari database.
-     * URL: DELETE /mahasiswa/{id}
-     */
     public function destroy($id)
     {
-        // Hapus baris ini setelah selesai:
-        return redirect()->route('mahasiswa.index');
+        // Cari data mahasiswa berdasarkan id
+        $mahasiswa = Mahasiswa::findOrFail($id);
+
+        // Hapus data
+        $mahasiswa->delete();
+
+        // Redirect ke halaman index dengan pesan sukses
+        return redirect()->route('mahasiswa.index')
+                         ->with('success', 'Data mahasiswa berhasil dihapus.');
     }
 }
