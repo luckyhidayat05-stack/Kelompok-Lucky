@@ -62,14 +62,11 @@ class MahasiswaController extends Controller
                          ->with('success', 'Data mahasiswa berhasil ditambahkan!');
     }
 
-    /**
-     * Tampilkan form edit mahasiswa.
-     * URL: GET /mahasiswa/{id}/edit
-     */
     public function edit($id)
     {
-        // Hapus baris ini setelah selesai:
-        return view('mahasiswa.edit', ['mahasiswa' => null]);
+        $mahasiswa = Mahasiswa::findOrFail($id);
+
+        return view('mahasiswa.edit', compact('mahasiswa'));
     }
 
     /**
@@ -78,8 +75,27 @@ class MahasiswaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // Hapus baris ini setelah selesai:
-        return redirect()->route('mahasiswa.index');
+        $request->validate([
+            'nama' => 'required|string|max:100',
+            'nim' => 'required|string|max:20|unique:mahasiswas,nim,' . $id,
+            'jurusan' => 'required|string|max:100',
+            'angkatan' => 'required|numeric',
+            'email' => 'required|email|unique:mahasiswas,email,' . $id,
+        ]);
+
+        $mahasiswa = Mahasiswa::findOrFail($id);
+
+        $mahasiswa->update([
+            'nama' => $request->nama,
+            'nim' => $request->nim,
+            'jurusan' => $request->jurusan,
+            'angkatan' => $request->angkatan,
+            'email' => $request->email,
+        ]);
+
+        return redirect()
+            ->route('mahasiswa.index')
+            ->with('success', 'Data mahasiswa berhasil diperbarui.');
     }
 
     /**
