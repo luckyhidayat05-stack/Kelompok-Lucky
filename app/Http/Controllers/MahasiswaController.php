@@ -84,36 +84,44 @@ class MahasiswaController extends Controller
     // =========================================================
 
     /**
-     * Tampilkan form edit mahasiswa.
-     * URL: GET /mahasiswa/{id}/edit
-     */
-    public function edit($id)
-    {
-        // TODO: Cari mahasiswa berdasarkan $id
-        // Gunakan: Mahasiswa::findOrFail($id)
-        // Kirim ke view: resources/views/mahasiswa/edit.blade.php
+ * Tampilkan form edit mahasiswa.
+ * URL: GET /mahasiswa/{id}/edit
+ */
+public function edit($id)
+{
+    $mahasiswa = Mahasiswa::findOrFail($id);
 
-        // Hapus baris ini setelah selesai:
-        return view('mahasiswa.edit', ['mahasiswa' => null]);
-    }
+    return view('mahasiswa.edit', compact('mahasiswa'));
+}
 
-    /**
-     * Update data mahasiswa di database.
-     * URL: PUT /mahasiswa/{id}
-     */
-    public function update(Request $request, $id)
-    {
-        // TODO: Validasi input dari form
-        // Field yang wajib: nama, nim, jurusan, angkatan, email
+/**
+ * Update data mahasiswa di database.
+ * URL: PUT /mahasiswa/{id}
+ */
+public function update(Request $request, $id)
+{
+    $request->validate([
+        'nama' => 'required|string|max:100',
+        'nim' => 'required|string|max:20|unique:mahasiswas,nim,' . $id,
+        'jurusan' => 'required|string|max:100',
+        'angkatan' => 'required|numeric',
+        'email' => 'required|email|unique:mahasiswas,email,' . $id,
+    ]);
 
-        // TODO: Cari mahasiswa berdasarkan $id lalu update
-        // Gunakan: $mahasiswa->update([...])
+    $mahasiswa = Mahasiswa::findOrFail($id);
 
-        // TODO: Redirect ke halaman show/index dengan pesan sukses
+    $mahasiswa->update([
+        'nama' => $request->nama,
+        'nim' => $request->nim,
+        'jurusan' => $request->jurusan,
+        'angkatan' => $request->angkatan,
+        'email' => $request->email,
+    ]);
 
-        // Hapus baris ini setelah selesai:
-        return redirect()->route('mahasiswa.index');
-    }
+    return redirect()
+        ->route('mahasiswa.index')
+        ->with('success', 'Data mahasiswa berhasil diperbarui.');
+}
 
     // =========================================================
     // 🗑️ BAGIAN 4 — DELETE (destroy)

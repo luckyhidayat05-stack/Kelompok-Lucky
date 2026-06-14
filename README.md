@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
@@ -57,3 +58,11 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+=======
+# Kelompok-Lucky
+231011700166 - Lucky Hidayat Saputra
+231011700449 - Tegar Erwanthio Subakti 
+231011700167 - Fauzan Fadhlul Rahman
+231011701281 - Rafi Rahmat Pratama
+231011700217 - Harry Hermawan
+>>>>>>> 2748bbbcab640c3e0bd5a3e4fe67d62a5c211898
