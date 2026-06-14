@@ -124,17 +124,16 @@ class MahasiswaController extends Controller
      * Hapus data mahasiswa dari database.
      * URL: DELETE /mahasiswa/{id}
      */
-    public function destroy($id)
-    {
-        // TODO: Cari mahasiswa berdasarkan $id
-        // Gunakan: Mahasiswa::findOrFail($id)
+public function destroy($id)
+{
+    // Cari data mahasiswa berdasarkan id
+    $mahasiswa = Mahasiswa::findOrFail($id);
 
-        // TODO: Hapus data
-        // Gunakan: $mahasiswa->delete()
+    // Hapus data
+    $mahasiswa->delete();
 
-        // TODO: Redirect ke halaman index dengan pesan sukses
-
-        // Hapus baris ini setelah selesai:
-        return redirect()->route('mahasiswa.index');
-    }
+    // Redirect ke halaman index dengan pesan sukses
+    return redirect()->route('mahasiswa.index')
+                     ->with('success', 'Data mahasiswa berhasil dihapus.');
+}
 }

@@ -8,6 +8,21 @@
     </a>
 </div>
 
+{{-- Notifikasi sukses --}}
+@if(session('success'))
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    Swal.fire({
+        icon: 'success',
+        title: 'Berhasil',
+        text: "{{ session('success') }}",
+        timer: 2000,
+        showConfirmButton: false
+    });
+});
+</script>
+@endif
+
 <div class="card shadow-sm">
     <div class="card-body p-0">
         <table class="table table-hover mb-0">
@@ -40,9 +55,10 @@
                            class="btn btn-sm btn-warning me-1">
                             <i class="bi bi-pencil"></i>
                         </a>
+
                         <form action="{{ route('mahasiswa.destroy', $mahasiswa->id) }}"
-                              method="POST" class="d-inline"
-                              onsubmit="return confirm('Yakin hapus data ini?')">
+                              method="POST"
+                              class="d-inline form-delete">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-sm btn-danger">
@@ -63,4 +79,33 @@
         </table>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    document.querySelectorAll('.form-delete').forEach(function(form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            Swal.fire({
+                title: 'Yakin hapus?',
+                text: "Data tidak bisa dikembalikan!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
+    });
+
+});
+</script>
 @endsection
