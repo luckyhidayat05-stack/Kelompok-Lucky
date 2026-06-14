@@ -7,23 +7,14 @@ use Illuminate\Http\Request;
 
 class MahasiswaController extends Controller
 {
-    // =========================================================
-    // 👤 BAGIAN 1 & 2 — READ (index & show)
-    // Dikerjakan oleh: (Nama 2)
-    // =========================================================
-
     /**
      * Tampilkan semua data mahasiswa.
      * URL: GET /mahasiswa
      */
     public function index()
     {
-        // TODO: Ambil semua data mahasiswa dari database
-        // Gunakan: Mahasiswa::all() atau Mahasiswa::paginate(10)
-        // Kirim ke view: resources/views/mahasiswa/index.blade.php
-
-        // Hapus baris ini setelah selesai:
-        return view('mahasiswa.index', ['mahasiswas' => []]);
+        $mahasiswas = Mahasiswa::all();
+        return view('mahasiswa.index', ['mahasiswas' => $mahasiswas]);
     }
 
     /**
@@ -32,18 +23,9 @@ class MahasiswaController extends Controller
      */
     public function show($id)
     {
-        // TODO: Cari mahasiswa berdasarkan $id
-        // Gunakan: Mahasiswa::findOrFail($id)
-        // Kirim ke view: resources/views/mahasiswa/show.blade.php
-
-        // Hapus baris ini setelah selesai:
-        return view('mahasiswa.show', ['mahasiswa' => null]);
+        $mahasiswa = Mahasiswa::findOrFail($id);
+        return view('mahasiswa.show', ['mahasiswa' => $mahasiswa]);
     }
-
-    // =========================================================
-    // ➕ BAGIAN 2 — CREATE (create & store)
-    // Dikerjakan oleh: (Nama 1)
-    // =========================================================
 
     /**
      * Tampilkan form tambah mahasiswa.
@@ -51,10 +33,6 @@ class MahasiswaController extends Controller
      */
     public function create()
     {
-        // TODO: Tampilkan halaman form tambah mahasiswa
-        // Return view: resources/views/mahasiswa/create.blade.php
-
-        // Hapus baris ini setelah selesai:
         return view('mahasiswa.create');
     }
 
@@ -64,24 +42,25 @@ class MahasiswaController extends Controller
      */
     public function store(Request $request)
     {
-        // TODO: Validasi input dari form
-        // Field yang wajib: nama, nim, jurusan, angkatan, email
-        // Gunakan $request->validate([...])
+        $request->validate([
+            'nim'      => 'required|string|unique:mahasiswas,nim|max:20',
+            'nama'     => 'required|string|max:100',
+            'email'    => 'required|email|unique:mahasiswas,email|max:100',
+            'jurusan'  => 'required|string|max:100',
+            'angkatan' => 'required|integer|digits:4',
+        ]);
 
-        // TODO: Simpan data ke database
-        // Gunakan: Mahasiswa::create([...])
+        Mahasiswa::create([
+            'nim'      => $request->nim,
+            'nama'     => $request->nama,
+            'email'    => $request->email,
+            'jurusan'  => $request->jurusan,
+            'angkatan' => $request->angkatan,
+        ]);
 
-        // TODO: Redirect ke halaman index dengan pesan sukses
-        // Gunakan: return redirect()->route('mahasiswa.index')->with('success', '...')
-
-        // Hapus baris ini setelah selesai:
-        return redirect()->route('mahasiswa.index');
+        return redirect()->route('mahasiswa.index')
+                         ->with('success', 'Data mahasiswa berhasil ditambahkan!');
     }
-
-    // =========================================================
-    // ✏️ BAGIAN 3 — UPDATE (edit & update)
-    // Dikerjakan oleh: (Nama 3)
-    // =========================================================
 
     /**
      * Tampilkan form edit mahasiswa.
@@ -89,10 +68,6 @@ class MahasiswaController extends Controller
      */
     public function edit($id)
     {
-        // TODO: Cari mahasiswa berdasarkan $id
-        // Gunakan: Mahasiswa::findOrFail($id)
-        // Kirim ke view: resources/views/mahasiswa/edit.blade.php
-
         // Hapus baris ini setelah selesai:
         return view('mahasiswa.edit', ['mahasiswa' => null]);
     }
@@ -103,22 +78,9 @@ class MahasiswaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // TODO: Validasi input dari form
-        // Field yang wajib: nama, nim, jurusan, angkatan, email
-
-        // TODO: Cari mahasiswa berdasarkan $id lalu update
-        // Gunakan: $mahasiswa->update([...])
-
-        // TODO: Redirect ke halaman show/index dengan pesan sukses
-
         // Hapus baris ini setelah selesai:
         return redirect()->route('mahasiswa.index');
     }
-
-    // =========================================================
-    // 🗑️ BAGIAN 4 — DELETE (destroy)
-    // Dikerjakan oleh: (Nama 4)
-    // =========================================================
 
     /**
      * Hapus data mahasiswa dari database.
@@ -126,14 +88,6 @@ class MahasiswaController extends Controller
      */
     public function destroy($id)
     {
-        // TODO: Cari mahasiswa berdasarkan $id
-        // Gunakan: Mahasiswa::findOrFail($id)
-
-        // TODO: Hapus data
-        // Gunakan: $mahasiswa->delete()
-
-        // TODO: Redirect ke halaman index dengan pesan sukses
-
         // Hapus baris ini setelah selesai:
         return redirect()->route('mahasiswa.index');
     }
